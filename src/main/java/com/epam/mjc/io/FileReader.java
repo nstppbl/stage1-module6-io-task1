@@ -1,11 +1,29 @@
 package com.epam.mjc.io;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
 
 
 public class FileReader {
 
-    public Profile getDataFromFile(File file) {
-        return new Profile();
+    public Profile getDataFromFile(File file) throws IOException {
+        HashMap <String, String> map = new HashMap<>();
+        String input;
+
+        BufferedReader reader = new BufferedReader(new java.io.FileReader(file));
+        while ((input = reader.readLine()) != null) {
+            String[] keyValuePair = input.split(": ", 2);
+            String key = keyValuePair[0];
+            String value = keyValuePair[1];
+            map.put(key, value);
+        }
+
+        return new Profile(map.get("Name"),
+                Integer.valueOf(map.get("Age")),
+                map.get("Email"),
+                Long.valueOf(map.get("Phone")));
     }
 }
